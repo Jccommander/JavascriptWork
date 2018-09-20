@@ -15,42 +15,27 @@ data.forEach((alien) => {
     })
 });
 
+// Create variables to hold filtered data outside of function
+
+var filterHolder = undefined;
+var buttonPushed = false;
+
+// Save the select tag so that its value can be called later
+
+var selector = d3.select("#filterSelect");
+
+// Create filter button that reads the current selection value and uses it to filter the appropriate
+// data
+
 var button = d3.select("#filter-btn");
 
-function dateUpdater() {
-
-    // Prevent refresh and delete the tbody so a new one can be appended in its place
-    d3.event.preventDefault();
-    tbody.remove();
-
-    // Retrieve the input
-    var inputElement = d3.select("#datetime");
-    var inputValue = inputElement.property("value");
-    console.log(inputValue);
-
-    // Filter through the data using the inputed date
-    filteredData = data.filter(alien => alien.date === inputValue);
-    console.log(filteredData);
-
-    // Rebuild the tbody
-    var table = d3.select("#ufo-table");
-    var tbody = table.append("tbody");
-
-    // Use filtered data to repopulate the tbody
-    filteredData.forEach((alien) => {
-        var row = tbody.append("tr");
-        Object.entries(alien).forEach(([key,value]) => {
-            var cell = row.append("td");
-            cell.text(value);
-        })
-    });
-};
-
-// Create an event listener to detect filter button click, then call the dateUpdater function
 button.on("click", function() {
-
-    // Prevent refresh and delete the tbody so a new one can be appended in its place
     d3.event.preventDefault();
+
+    // Get selector's current value on click
+    var selValue = selector.node().value;
+
+    // Delete the existing tbody
     var tbody = d3.select("tbody");
     tbody.remove();
 
@@ -59,14 +44,45 @@ button.on("click", function() {
     var inputValue = inputElement.property("value");
     console.log(inputValue);
 
-    // Filter through the data using the inputed date
-    filteredData = data.filter(alien => alien.datetime === inputValue);
-    console.log(filteredData);
+    // Check to see if the user has already pushed the button once; if not, use standard dataset
+    // If so, use the already filtered data in order to stack filter options
+    if (buttonPushed === true) {
+        var funcData = filterHolder;
+    } else {
+        var funcData = data;
+    };
+
+    // Use the retrieved selector value to determine which filter should be used
+    switch (selValue) {
+        case "datetime":
+            filteredData = funcData.filter(alien => alien.datetime === inputValue);
+            console.log(filteredData);
+            break;
+        case "city":
+            filteredData = funcData.filter(alien => alien.city === inputValue);
+            console.log(filteredData);
+            break;
+        case "state":
+            filteredData = funcData.filter(alien => alien.state === inputValue);
+            console.log(filteredData);
+            break;
+        case "country":
+            filteredData = funcData.filter(alien => alien.country === inputValue);
+            console.log(filteredData);
+            break;
+        case "shape":
+            filteredData = funcData.filter(alien => alien.shape === inputValue);
+            console.log(filteredData);
+            break;
+        default:
+            console.log("Failed to retrieve appropriate selector value");
+            break;
+    }
 
     // Rebuild the tbody
     var table = d3.select("#ufo-table");
     var newtbody = table.append("tbody");
-
+    
     // Use filtered data to repopulate the tbody
     filteredData.forEach((alien) => {
         var row = newtbody.append("tr");
@@ -74,5 +90,13 @@ button.on("click", function() {
             var cell = row.append("td");
             cell.text(value);
         })
-    });
+    })
+    
+    // Put the filtered data into the filterHolder variable to save it in case of multiple filter options
+    // being used by the user
+    filterHolder = filteredData;
+
+    // Set the boolean buttonPushed to true
+    buttonPushed = true;
+
 });
