@@ -91,6 +91,14 @@ button.on("click", function() {
             cell.text(value);
         })
     })
+
+    // Create if statement that detects if the filtered data is empty, and alerts the user that no results
+    // for their filter search were returned
+    if (filteredData == "") {
+        d3.select("table")
+            .append("h1")
+            .text("Sorry, No results matching your query were found")
+    }
     
     // Put the filtered data into the filterHolder variable to save it in case of multiple filter options
     // being used by the user
@@ -98,5 +106,11 @@ button.on("click", function() {
 
     // Set the boolean buttonPushed to true
     buttonPushed = true;
+
+    // Create p tag under filter box to display to user all filter options they have currently selected
+    var filterStorage = d3.select(".filter_storage");
+
+    filterStorage.append("p")
+        .html(`<strong>${selValue}</strong>: ${inputValue}`)
 
 });

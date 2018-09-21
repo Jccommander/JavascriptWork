@@ -66,6 +66,9 @@ class TextScramble {
 // ——————————————————————————————————————————————————
 
 const phrases = [
+  'The Truth is Out There',
+  'The Truth is Out There',
+  'The Truth is Out There',
   'The Truth is Out There'
 ]
 

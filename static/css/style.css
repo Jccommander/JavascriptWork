@@ -91,6 +91,15 @@ select {
   margin-top: 50px;
 }
 
+/* My addition to the HTML page, the styling for the filter display and its components */
+
+.filter_storage > p {
+  background-color: #4E5D6C;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
 /* The styles for the parallax */
 .hero {
   position: relative;
